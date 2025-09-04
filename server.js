@@ -6,7 +6,7 @@ const cors = require('cors');
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
 // Initialize Gemini AI
-const genAI = new GoogleGenerativeAI('AIzaSyBrtqlw5sysR_-htsDl03RLZuGEXPnIAnk'); // Replace with your actual API key
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || 'AIzaSyBrtqlw5sysR_-htsDl03RLZuGEXPnIAnk');
 const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
 
 const app = express();
