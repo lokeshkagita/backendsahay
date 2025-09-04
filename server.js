@@ -100,37 +100,41 @@ app.post('/register', (req, res) => {
 });
 
 // User login endpoint
+// User login endpoint
 app.post('/login', (req, res) => {
-  const { email, password } = req.body;
-  
-  console.log('Login attempt:', { email });
-  
+  const { email, password, fullName, age } = req.body; // accept extra fields
+  console.log('Login attempt:', { email, fullName, age });
+
+  // Validate required fields
   if (!email || !password) {
     return res.status(400).json({
       success: false,
       message: 'Email and password are required'
     });
   }
-  
+
+  // Find user by email
   const user = users.find(u => u.email === email);
-  
+
   if (!user) {
     return res.status(401).json({
       success: false,
       message: 'User not found. Please check your email or register first.'
     });
   }
-  
+
+  // Check password
   if (user.password !== password) {
     return res.status(401).json({
       success: false,
       message: 'Invalid password'
     });
   }
-  
-  // Update last active
+
+  // Update last active timestamp
   user.lastActive = new Date().toISOString();
-  
+
+  // Respond with success
   res.json({
     success: true,
     message: 'Welcome back to MoodSync!',
@@ -146,20 +150,6 @@ app.post('/login', (req, res) => {
   });
 });
 
-// Debug endpoint
-app.get('/users', (req, res) => {
-  const userList = users.map(user => ({
-    id: user.id,
-    userId: user.userId,
-    fullName: user.fullName,
-    email: user.email,
-    age: user.age,
-    gender: user.gender,
-    createdAt: user.createdAt,
-    lastActive: user.lastActive
-  }));
-  res.json({ users: userList, count: users.length });
-});
 
 // AI Girlfriend Service Endpoints
 const girlfriendPrompt = `
